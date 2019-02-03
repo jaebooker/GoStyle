@@ -11,12 +11,24 @@ func greetingWeb(c echo.Context) error {
 func getCats(c echo.Context) error {
     catName := c.QueryParam("catname")
     catType := c.QueryParam("catspecies")
-    return c.String(http.StatusOK, fmt.Sprintf("Your cat's name is %s\nand she or he's a %s\n", catName, catType))
+    dataType := c.Param("data")
+    if dataType == "string" {
+        return c.String(http.StatusOK, fmt.Sprintf("Your cat's name is %s\nand she or he's a %s\n", catName, catType))
+    }
+    if dataType == "json" {
+        return c.JSON(http.StatusOK, map[string]string{
+            "name": catName,
+            "type": catType,
+        })
+    }
+    return c.JSON(http.StatusBadRequest, map[string]string{
+        "error": "this is wrong",
+    })
 }
 func main() {
     fmt.Printf("Mornin', Starshine!")
     e := echo.New()
     e.GET("/", greetingWeb)
-    e.GET("/cats", getCats)
+    e.GET("/cats/:data", getCats)
     e.Start(":8000")
 }
