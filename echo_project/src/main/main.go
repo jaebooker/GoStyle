@@ -12,6 +12,12 @@ type Cat struct {
     Name    string  `json:"name"`
     Type    string  `json:"type"`
 }
+type Slugs struct {
+    Name    string  `json:"name"`
+    Type    string  `json:"type"`
+    Count    int  `json:"count"`
+    SlimeLevel    int  `json:"slime-level"`
+}
 func greetingWeb(c echo.Context) error {
     return c.String(http.StatusOK, "Hello from the sever side")
 }
@@ -48,11 +54,23 @@ func addKittyCat(c echo.Context) error {
     log.Printf("Here is your kitty cat, Sir:", cat)
     return c.String(http.StatusOK, "We have received your kitty cat, Sir.")
 }
+func addSlugs(c echo.Context) error {
+    slugs := Slugs{}
+    defer c.Request().Body.Close()
+    err := json.NewDecoder(c.Request().Body).Decode(&slugs)
+    if err != nil {
+        log.Printf("Failed reading addSlugs request: %s", err)
+        return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+    }
+    log.Printf("Here are your slugs, Sir. Mind the slime:", slugs)
+    return c.String(http.StatusOK, "We have received your slugs, Sir.")
+}
 func main() {
     fmt.Printf("Mornin', Starshine!")
     e := echo.New()
     e.GET("/", greetingWeb)
     e.GET("/cats/:data", getCats)
     e.POST("/cats", addKittyCat)
+    e.POST("/slugs", addSlugs)
     e.Start(":8000")
 }
