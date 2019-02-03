@@ -7,6 +7,7 @@ import(
     "log"
     "encoding/json"
     "github.com/labstack/echo"
+    "github.com/labstack/echo/middleware"
 )
 type Cat struct {
     Name    string  `json:"name"`
@@ -87,9 +88,17 @@ func addPandas(c echo.Context) error {
     log.Printf("Here are your pandas, Sir. Monsterous things, aren't they?", pandas)
     return c.String(http.StatusOK, "We have received your pandas, Sir. I do hope they don't kill anyone.")
 }
+func mainAdmin(c echo.Context) error {
+    return c.String(http.StatusOK, "You twinkle above us, we twinkle below")
+}
 func main() {
     fmt.Printf("Mornin', Starshine!")
     e := echo.New()
+    g := e.Group("/admin", middleware.Logger())
+    g.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+            Format: `[${time_rfc3339}] ${status} ${method} ${host}${path} ${latency_human}` + "\n",
+    }))
+    g.GET("/main", mainAdmin, middleware.Logger())
     e.GET("/", greetingWeb)
     e.GET("/cats/:data", getCats)
     e.POST("/cats", addKittyCat)
