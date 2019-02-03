@@ -18,6 +18,13 @@ type Slugs struct {
     Count    int  `json:"count"`
     SlimeLevel    int  `json:"slime-level"`
 }
+type Pandas struct {
+    Name    string  `json:"name"`
+    Type    string  `json:"type"`
+    Count    int  `json:"count"`
+    CannibalisticLevel    int  `json:"cannibal-level"`
+    HumansConsumed    int  `json:"humans-consumed"`
+}
 func greetingWeb(c echo.Context) error {
     return c.String(http.StatusOK, "Hello from the sever side")
 }
@@ -65,6 +72,21 @@ func addSlugs(c echo.Context) error {
     log.Printf("Here are your slugs, Sir. Mind the slime:", slugs)
     return c.String(http.StatusOK, "We have received your slugs, Sir.")
 }
+func addPandas(c echo.Context) error {
+    pandas := Pandas{}
+    err := c.Bind(&pandas)
+    if pandas.CannibalisticLevel < 1 {
+        logger := "A panda has never had a Cannibalistic Level below one."
+        log.Printf(logger)
+        return echo.NewHTTPError(http.StatusInternalServerError, logger)
+    }
+    if err != nil {
+        log.Printf("Failed reading your request to add pandas: %s", err)
+        return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+    }
+    log.Printf("Here are your pandas, Sir. Monsterous things, aren't they?", pandas)
+    return c.String(http.StatusOK, "We have received your pandas, Sir. I do hope they don't kill anyone.")
+}
 func main() {
     fmt.Printf("Mornin', Starshine!")
     e := echo.New()
@@ -72,5 +94,6 @@ func main() {
     e.GET("/cats/:data", getCats)
     e.POST("/cats", addKittyCat)
     e.POST("/slugs", addSlugs)
+    e.POST("/pandas", addPandas)
     e.Start(":8000")
 }
