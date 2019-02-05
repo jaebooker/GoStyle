@@ -2,7 +2,12 @@ package main
 
 import(
     "fmt"
+    "github.com/labstack/echo"
 )
+func checkAddress(c echo.Context) error {
+    return c.String(http.StatusOK, someFunc())
+}
 func main() {
-    fmt.Println("Good morning, starshine, the Earth says Hello!")
+    e := echo.New()
+    e.GET("/", checkAddress)
 }
