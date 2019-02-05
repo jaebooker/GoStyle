@@ -88,12 +88,21 @@ func addPandas(c echo.Context) error {
     log.Printf("Here are your pandas, Sir. Monsterous things, aren't they?", pandas)
     return c.String(http.StatusOK, "We have received your pandas, Sir. I do hope they don't kill anyone.")
 }
+//middleware
 func mainAdmin(c echo.Context) error {
     return c.String(http.StatusOK, "You twinkle above us, we twinkle below")
+}
+func ServerHeader(next echo.HandlerFunc) echo.HandlerFunc {
+    return func(c echo.Context) error {
+        c.Response().Header().Set(echo.HeaderServer, "Anything")
+        c.Response().Header().Set("nutty nutty nutty", "Anything")
+        return next(c)
+    }
 }
 func main() {
     fmt.Printf("Mornin', Starshine!")
     e := echo.New()
+    e.Use(ServerHeader)
     g := e.Group("/admin", middleware.Logger())
     g.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
             Format: `[${time_rfc3339}] ${status} ${method} ${host}${path} ${latency_human}` + "\n",
