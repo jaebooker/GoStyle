@@ -2,6 +2,7 @@ package main
 
 import(
     "fmt"
+    "time"
     "net/http"
     "io/ioutil"
     "log"
@@ -88,7 +89,7 @@ func addPandas(c echo.Context) error {
     log.Printf("Here are your pandas, Sir. Monsterous things, aren't they?", pandas)
     return c.String(http.StatusOK, "We have received your pandas, Sir. I do hope they don't kill anyone.")
 }
-//middleware
+//admin middleware
 func mainAdmin(c echo.Context) error {
     return c.String(http.StatusOK, "You twinkle above us, we twinkle below")
 }
@@ -99,11 +100,31 @@ func ServerHeader(next echo.HandlerFunc) echo.HandlerFunc {
         return next(c)
     }
 }
+//cookie time
+func mainCookie(c echo.Context) error {
+    return c.String(http.StatusOK, "Cookie with your meal, Sir?")
+}
+func login(c echo.Context) error {
+    username := c.QueryParam("username")
+    password := c.QueryParam("password")
+    //normally would check user and password against db, after hashing
+    if username == "PiereKirby" && password == "1234" {
+        cookie := &http.Cookie{}
+        //new(http.Cookie) same^
+        cookie.Name = "sessionID"
+        cookie.Value = "a string is not a string by any ther type"
+        cookie.Expires = time.Now().Add(124 * time.Hour)
+        c.SetCookie(cookie)
+        return c.String(http.StatusOK, "Excellent choice, Sir")
+    }
+    return c.String(http.StatusUnauthorized, "You are not my Lord. I will not serve you.")
+}
 func main() {
     fmt.Printf("Mornin', Starshine!")
     e := echo.New()
     e.Use(ServerHeader)
     g := e.Group("/admin", middleware.Logger())
+    cg := e.Group("/cookie")
     g.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
             Format: `[${time_rfc3339}] ${status} ${method} ${host}${path} ${latency_human}` + "\n",
     }))
@@ -113,8 +134,10 @@ func main() {
         }
         return false, nil
     }))
+    cg.GET("/main", mainCookie)
     g.GET("/main", mainAdmin, middleware.Logger())
     e.GET("/", greetingWeb)
+    e.GET("/login", login)
     e.GET("/cats/:data", getCats)
     e.POST("/cats", addKittyCat)
     e.POST("/slugs", addSlugs)
