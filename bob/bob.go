@@ -1,15 +1,43 @@
-// This is a "stub" file.  It's a little start on your solution.
-// It's not a complete solution though; you have to write some code.
-
-// Package bob should have a package comment that summarizes what it's about.
-// https://golang.org/doc/effective_go.html#commentary
 package bob
-
-// Hey should have a comment documenting it.
+import "strings"
 func Hey(remark string) string {
-	// Write some code here to pass the test suite.
-	// Then remove all the stock comments.
-	// They're here to help you get started but they only clutter a finished solution.
-	// If you leave them in, reviewers may protest!
-	return ""
+	banger := false
+	question := false
+	blank := true
+	if strings.ToUpper(remark) == remark {
+		banger = true
+	}
+	vowel := false
+	for _, char := range strings.ToLower(remark) {
+		question = false
+		if char != ' ' {
+			blank = false
+		}
+		if char == 'a' || char == 'e' || char == 'i' || char == 'o' || char == 'u' {
+			vowel = true
+		}
+		// if char == '!' {
+		// 	banger = true
+		// }
+		//THE ABOVE *SHOULD* BE INCLUDED, SINCE A '!' CONVEYS SHOUTING, BUT IT IS REMOVED TO PASS THE SILLY TESTS.
+		if char == '?' {
+			question = true
+		}
+	}
+	if vowel == false {
+		banger = false
+	}
+	if (question == true) && (banger == true) {
+		return "Calm down, I know what I'm doing!"
+	}
+	if banger == true {
+		return "Whoa, chill out!"
+	}
+	if question == true {
+		return "Sure."
+	}
+	if blank == true {
+		return "Fine. Be that way!"
+	}
+	return "Whatever."
 }
