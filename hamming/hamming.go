@@ -1,12 +1,12 @@
 package hamming
-
+import "errors"
 func Distance(a, b string) (int, error) {
     distance := 0
     if len(a) < 1 {
         return 0, nil
     }
     if len(a) != len(b) {
-        return 0, nil
+        return 0, errors.New("DNA is the same length, idiot!!")
     }
     if len(a) < 2 {
         if a != b {

@@ -1,15 +1,33 @@
-// This is a "stub" file.  It's a little start on your solution.
-// It's not a complete solution though; you have to write some code.
-
-// Package acronym should have a package comment that summarizes what it's about.
-// https://golang.org/doc/effective_go.html#commentary
 package acronym
-
-// Abbreviate should have a comment documenting it.
+import (
+	"strings"
+	"unicode"
+)
+// func abbreviate(s string) string {
+// 	acronym := ""
+// 	for i, l := range s {
+// 		sl := strings.ToUpper(string(l))
+// 		if i == 0 {
+// 			acronym += sl
+// 			continue
+// 		}
+// 		prev := rune(s[i-1])
+// 		curr := rune(s[i])
+// 		letterAfterNonLetter := unicode.IsLetter(curr) && !unicode.IsLetter(prev)
+// 		upperAfterNonUpper := unicode.IsUpper(curr) && !unicode.IsUpper(prev)
+// 		if letterAfterNonLetter || upperAfterNonUpper {
+// 			acronym += sl
+// 		}
+// 	}
+// 	return acronym
+// }
 func Abbreviate(s string) string {
-	// Write some code here to pass the test suite.
-	// Then remove all the stock comments.
-	// They're here to help you get started but they only clutter a finished solution.
-	// If you leave them in, reviewers may protest!
-	return ""
+	acronym := ""
+	for _, v := range strings.FieldsFunc(s, split) {
+		acronym += strings.ToUpper(string(v[0]))
+	}
+	return acronym
+}
+func split(c rune) bool {
+	return unicode.In(c, unicode.Dash, unicode.Space)
 }
