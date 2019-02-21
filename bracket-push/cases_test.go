@@ -27,7 +27,7 @@ var testCases = []bracketTest{
 	},
 	{
 		// wrong ordered brackets
-		"}{",
+		"}{}",
 		false,
 	},
 	{
