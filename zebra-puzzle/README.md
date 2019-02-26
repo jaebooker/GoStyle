@@ -1,7 +1,5 @@
 # Zebra Puzzle
 
-Solve the zebra puzzle.
-
 1. There are five houses.
 2. The Englishman lives in the red house.
 3. The Spaniard owns the dog.
@@ -27,7 +25,7 @@ Who owns the zebra?
 
 ## Implementation
 
-Define a single function, SolvePuzzle, which returns a solution
+Create a function which returns a solution
 containing two strings, whose values are the answers to the
 zebra-puzzle questions "Who drinks water?" and "Who owns the Zebra?".
 Each answer will be one of the resident's nationalities:

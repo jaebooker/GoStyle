@@ -90,7 +90,7 @@
 // func (c *compuCell) RemoveCallback(h CallbackHandle) {
 // 	delete(c.cb, h)
 // }
-
-func (c *compuCell) Value() int {
-	return c.eval()
-}
+//
+// func (c *compuCell) Value() int {
+// 	return c.eval()
+// }
