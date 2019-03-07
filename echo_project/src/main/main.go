@@ -87,7 +87,7 @@ func addPandas(c echo.Context) error {
         return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
     }
     log.Printf("Here are your pandas, Sir. Monsterous things, aren't they?", pandas)
-    return c.String(http.StatusOK, "We have received your pandas, Sir. I do hope they don't kill anyone.")
+    return c.String(http.StatusOK, "We have received your pandas, Sir. I do hope they don't kill anyone important.")
 }
 //admin middleware
 func mainAdmin(c echo.Context) error {
